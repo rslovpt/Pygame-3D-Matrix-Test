@@ -1,1 +1,1 @@
-A cube in python usinb weak perspective projection, and it rotates!
+A cube in python using weak perspective projection, and it rotates as well!
