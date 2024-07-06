@@ -1,6 +1,6 @@
 import json
 
-def toTuple(Table : list):
+def toTuple(Table : list): #Converts a list of lists to tuple
     newTable = []
     for i in Table:
         newTable.append(tuple(i))
@@ -21,7 +21,11 @@ class jsonClass:
                 'Points': PointsTable,
                 'Vertices': VerticesTable,
                 'Position': Position,
-                'Name': ObjectDict['name']
+                'Name': ObjectDict['name'],
+                'Angles': {
+                    'Global': tuple(ObjectDict['angles']['global']),
+                    'Camera': tuple(ObjectDict['angles']['camera'])
+                }
             }
 
             Objects.append(extractedDict)

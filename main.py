@@ -3,7 +3,8 @@ import math, numpy
 import pygame.docs
 
 from scripts.object import ObjectRender
-from scripts.jsonManager import jsonClass 
+from scripts.jsonManager import jsonClass
+from scripts.camera import CameraClass
 
 window_size = (1280, 720)
 pygame.init()
@@ -11,28 +12,30 @@ screen = pygame.display.set_mode(window_size)
 clock = pygame.time.Clock()
 
 ObjectMap = jsonClass().extractObjectsFromFile("map.json")
-ReadyToRenderObject = []
+ReadyToRenderObjects = []
 
 for i in ObjectMap:
     Rendered = ObjectRender(
         size=90,
         points=i['Points'], 
         vertices=i['Vertices'], 
-        position=i['Position'], 
+        position=i['Position'],
+        angles=i['Angles'],
         screen=screen
     )
 
-    ReadyToRenderObject.append(Rendered)
+    ReadyToRenderObjects.append(Rendered)
 
 while True:
     screen.fill( (0,0,0) )
 
     dt = clock.tick(clock.get_fps())/1000
-    pygame.display.set_caption("FPS: " + str(clock.get_fps()))
+    pygame.display.set_caption("CONTROLS: W, A, S, D / FPS: " + str(clock.get_fps()))
     
-    for i in ReadyToRenderObject:
+    ReadyToRenderObjects = CameraClass(screen).moveCamera(ReadyToRenderObjects, dt=dt)
+    for i in ReadyToRenderObjects:
         i.Run(dt)
-        i.rotation_demonstration()
+        
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

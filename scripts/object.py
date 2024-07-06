@@ -1,7 +1,7 @@
 import math, pygame
 class ObjectRender:
     
-    def __init__(self, size : int, points : list, vertices : list, position : tuple, screen):
+    def __init__(self, size : int, points : list, vertices : list, position : tuple, angles : list, screen):
         self.screen = screen
         self.delta_time = 0
 
@@ -11,7 +11,9 @@ class ObjectRender:
         self.points = points; self.vertices = vertices
         self.global_position = position
 
-        self.object_angle = 0
+        self.object_angle = angles['Global']
+        self.fixed_camera_angle = angles['Camera']
+
         self.line_width = 3
 
     def draw_vertice_connections(self, points):
@@ -32,22 +34,22 @@ class ObjectRender:
         new_point = list(point)
 
         new_point[0] = point[0]
-        new_point[1] = (math.cos(self.object_angle) * point[1] - math.sin(self.object_angle) * point[2]) 
-        new_point[2] = (math.sin(self.object_angle) * point[1] + math.cos(self.object_angle) * point[2])
+        new_point[1] = (math.cos(self.object_angle[1]) * point[1] - math.sin(self.object_angle[1]) * point[2]) 
+        new_point[2] = (math.sin(self.object_angle[1]) * point[1] + math.cos(self.object_angle[1]) * point[2])
 
         return tuple(new_point)
     
     def rotateY(self, point):
         new_point = list(point)
 
-        new_point[0] = (math.cos(self.object_angle) * point[0] - math.sin(self.object_angle) * point[2])
+        new_point[0] = (math.cos(self.object_angle[0]) * point[0] - math.sin(self.object_angle[0]) * point[2])
         new_point[1] = point[1]
-        new_point[2] = (math.sin(self.object_angle) * point[0] + math.cos(self.object_angle) * point[2])
+        new_point[2] = (math.sin(self.object_angle[0]) * point[0] + math.cos(self.object_angle[0]) * point[2])
 
         return tuple(new_point)
 
     def rotation_demonstration(self):
-        self.object_angle += 1 * self.delta_time
+        self.object_angle = (self.object_angle[0] + (1 * self.delta_time), self.object_angle[1])
 
     def Run(self, delta_time):
         self.delta_time = delta_time
