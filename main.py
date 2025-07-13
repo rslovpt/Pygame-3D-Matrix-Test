@@ -1,14 +1,14 @@
 import pygame, sys
-import math, numpy
-import pygame.docs
 
 from scripts.object import ObjectRender
 from scripts.jsonManager import jsonClass
 from scripts.camera import CameraClass
 
-window_size = (1280, 720)
 pygame.init()
+
+window_size = (1280, 720)
 screen = pygame.display.set_mode(window_size)
+
 clock = pygame.time.Clock()
 
 ObjectMap = jsonClass().extractObjectsFromFile("map.json")
@@ -18,7 +18,9 @@ for i in ObjectMap:
     Rendered = ObjectRender(
         size=90,
         points=i['Points'], 
-        vertices=i['Vertices'], 
+        vertices=i['Vertices'],
+        faces=i['Faces'], 
+        ColorList=i['ColorList'],
         position=i['Position'],
         angles=i['Angles'],
         screen=screen
@@ -35,7 +37,6 @@ while True:
     ReadyToRenderObjects = CameraClass(screen).moveCamera(ReadyToRenderObjects, dt=dt)
     for i in ReadyToRenderObjects:
         i.Run(dt)
-        
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -47,6 +48,7 @@ while True:
         elif event.type == pygame.K_ESCAPE:
             pygame.quit()
             sys.exit()
-            
-    clock.tick_busy_loop(120)
+
+    clock.tick_busy_loop(60)
+
     pygame.display.update()
